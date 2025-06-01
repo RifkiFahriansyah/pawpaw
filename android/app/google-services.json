@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "630359897407",
+    "project_id": "pawpaw-project-5f9c7",
+    "storage_bucket": "pawpaw-project-5f9c7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630359897407:android:14ef892c0c41e931b68f8a",
+        "android_client_info": {
+          "package_name": "com.example.fasum"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0Sw0WiDdMfKK0RK8FhGL6SUOod9bsmro"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
