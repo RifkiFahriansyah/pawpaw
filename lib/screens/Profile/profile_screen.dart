@@ -48,98 +48,103 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.loose,
-         children: [
-    Positioned.fill(
-            child: Image.asset( Theme.of(context).brightness == Brightness.dark
-        ? 'assets/profile_dark.png'
-        : 'assets/profile_light.png', fit: BoxFit.cover),
-          ),       
-    SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Profile',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Theme.of(context).canvasColor,
-                  child: IconButton(
-                    iconSize: 24,
-                    icon: const Icon(Icons.logout,),
-                    onPressed: signOut,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        FutureBuilder<Map<String, dynamic>?>(
-          future: _userDataFuture,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final data = snapshot.data!;
-            return Container(
-              padding: const EdgeInsets.only(top: 24, left: 16),
-              child: Column(
+      body: SingleChildScrollView(
+        child: Stack(
+          fit: StackFit.loose,
+           children: [
+            Positioned.fill(
+              child: Image.asset( Theme.of(context).brightness == Brightness.dark
+          ? 'assets/profile_dark.png'
+          : 'assets/profile_light.png', fit: BoxFit.cover),
+            ),       
+            SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(height: 80),           
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundImage:
-                          _isBase64Image(data['profileImage'])
-                              ? MemoryImage(base64Decode(data['profileImage']))
-                              : const AssetImage('assets/placeholder_image.png')
-                                  as ImageProvider,
+                  const Text(
+                    'Profile',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
-                  
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child:
-                      Column(
-                        children: [
-                      _profileTile(Icons.person, 'Name', data['storeName']),
-                      _profileTile(Icons.phone, 'Phone', data['phoneNumber']),
-                      _profileTile(Icons.email, 'Email', data['email']),
-                      _profileTile(Icons.location_on, 'Location', data['locationName'] ?? 'Belum dipilih',),
-                ],),
                   ),
-                  
-            
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColorDark,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
+                  CircleAvatar(
+                    radius: 25,
+                    backgroundColor: Theme.of(context).canvasColor,
+                    child: IconButton(
+                      iconSize: 24,
+                      icon: const Icon(Icons.logout,),
+                      onPressed: signOut,
                     ),
-                    onPressed: () async {
-                      await Navigator.pushNamed(context, '/edit_profile');
-                      setState(() {
-                        _userDataFuture = _getUserData();
-                      });
-                    },
-                    child: const Text('EDIT', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
-                  )
                 ],
               ),
-            );
-          },
+            ),
+          ),
+          FutureBuilder<Map<String, dynamic>?>(
+            future: _userDataFuture,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              final data = snapshot.data!;
+              return Container(
+                padding: const EdgeInsets.only(top: 24, left: 16),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 80),           
+                      CircleAvatar(
+                        radius: 60,
+                        backgroundImage:
+                            _isBase64Image(data['profileImage'])
+                                ? MemoryImage(base64Decode(data['profileImage']))
+                                : const AssetImage('assets/placeholder_image.png')
+                                    as ImageProvider,
+                      ),
+                    
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10.0),
+                      child:
+                        Column(
+                          children: [
+                        _profileTile(Icons.person, 'Name', data['storeName']),
+                        _profileTile(Icons.phone, 'Phone', data['phoneNumber']),
+                        _profileTile(Icons.email, 'Email', data['email']),
+                        _profileTile(Icons.location_on, 'Location', data['locationName'] ?? 'Belum dipilih',),
+                  ],),
+                    ),
+                    
+              
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 50.0),      
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColorDark,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                        ),
+                        onPressed: () async {
+                          await Navigator.pushNamed(context, '/edit_profile');
+                          setState(() {
+                            _userDataFuture = _getUserData();
+                          });
+                        },
+                        child: const Text('EDIT', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
+           ],
         ),
-         ],
       ),
     );
   }

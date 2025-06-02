@@ -106,7 +106,7 @@ class _MapPickerScreenState extends State<MapPickerScreen> {
                 ),
                 child: Text(
                   _locationName!,
-                  style: const TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16, color: Colors.black),
                   textAlign: TextAlign.center,
                 ),
               ),

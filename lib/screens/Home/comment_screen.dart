@@ -276,6 +276,7 @@ class _CommentScreenState extends State<CommentScreen> {
                             Text(
                               'Replying to $replyingToName',
                               style: const TextStyle(
+                                color: Colors.white,        
                                 fontWeight: FontWeight.bold,
                                 fontSize: 12,
                               ),
@@ -285,13 +286,13 @@ class _CommentScreenState extends State<CommentScreen> {
                               replyingToText ?? '',
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 12),
+                              style: const TextStyle(fontSize: 12, color: Colors.white,),
                             ),
                           ],
                         ),
                       ),
                       IconButton(
-                        icon: const Icon(Icons.close, size: 20),
+                        icon: const Icon(Icons.close, size: 20, color: Colors.white,),
                         onPressed: () {
                           setState(() {
                             replyToCommentId = null;

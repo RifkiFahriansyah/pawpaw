@@ -176,6 +176,16 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       await fav.reference.update({'storeName': newStoreName});
     }
 
+    final commentQuery = await FirebaseFirestore.instance
+            .collectionGroup(
+              'comments',) 
+            .where('uid', isEqualTo: uid)
+            .get();
+
+    for (final doc in commentQuery.docs) {
+      await doc.reference.update({'storeName': newStoreName,
+        'profileImage': _base64Image});
+    }
 
     if (!mounted) return;
     Navigator.pop(context);
