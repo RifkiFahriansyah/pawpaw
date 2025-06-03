@@ -317,6 +317,46 @@ class _DetailScreenState extends State<DetailScreen> {
                           _circleButtonEdit(Icons.edit, widget.postId, context, _loadPostData),
                           _circleButtonComment(Icons.comment, () {_openCommentScreen(context);}),
                           _circleButtonFav(isFavorite ? Icons.favorite : Icons.favorite_border, toggleFavorite),
+                          if (widget.userId == uid)
+                          _circleButtonDel(Icons.delete, () async {
+  final confirm = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: const Text('Delete Post'),
+      content: const Text('Are you sure you want to delete this post? This action cannot be undone.'),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(ctx).pop(false), child: Text('Cancel',  )),
+        TextButton(onPressed: () => Navigator.of(ctx).pop(true), child: const Text('Delete', style: TextStyle(color: Colors.red))),
+      ],
+    ),
+  );
+
+  if (confirm == true) {
+    try {
+      await FirebaseFirestore.instance.collection('posts').doc(widget.postId).delete();
+
+      final usersSnapshot = await FirebaseFirestore.instance.collection('users').get();
+      for (final doc in usersSnapshot.docs) {
+        await doc.reference.collection('favorites').doc(widget.postId).delete().catchError((_) {});
+      }
+
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Post deleted successfully')),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to delete post: $e')),
+        );
+      }
+    }
+  }
+})
+
+
                         ],
                       ),
                     ],
@@ -329,8 +369,8 @@ class _DetailScreenState extends State<DetailScreen> {
   decoration:  BoxDecoration(
     color: Theme.of(context).shadowColor,
     boxShadow: [
-      BoxShadow(
-        color: Theme.of(context).shadowColor, blurRadius: 50, spreadRadius: 60, blurStyle: BlurStyle.inner, offset: Offset(0, 20), 
+      BoxShadow(      
+        color: Theme.of(context).shadowColor, blurRadius: 70, spreadRadius: 70, blurStyle: BlurStyle.normal, offset: Offset(0, 20),
       ),
     ],
   ),
@@ -423,6 +463,18 @@ class _DetailScreenState extends State<DetailScreen> {
     return IconButton(
       onPressed: onTap,
       icon: Icon(icon, color: const Color.fromRGBO(130, 115, 151, 1)),
+      style: IconButton.styleFrom(
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+        padding: const EdgeInsets.all(8),
+      ),
+    );
+  }
+
+  Widget _circleButtonDel(IconData icon, VoidCallback onTap) {
+    return IconButton(
+      onPressed: onTap,
+      icon: Icon(icon, color: Colors.orange),
       style: IconButton.styleFrom(
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),

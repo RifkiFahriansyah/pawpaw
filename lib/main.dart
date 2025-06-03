@@ -1,7 +1,7 @@
 import 'package:bottom_bar_matu/bottom_bar/bottom_bar_bubble.dart';
 import 'package:bottom_bar_matu/bottom_bar_item.dart';
 import 'package:fasum/firebase_options.dart';
-import 'package:fasum/screens/Wish/Favorite_screen.dart';
+import 'package:fasum/screens/Wish/favorite_screen.dart';
 import 'package:fasum/screens/AddPost/add_post_screen.dart';
 import 'package:fasum/screens/Profile/edit_profile_screen.dart';
 import 'package:fasum/screens/Home/home_screen.dart';
